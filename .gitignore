@@ -1,0 +1,5 @@
+/node_modules/
+/out/*
+/rip/*
+!/out/.empty
+!/rip/.empty

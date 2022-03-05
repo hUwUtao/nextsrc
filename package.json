@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "axios": "^0.26.0",
+    "source-map-unpack": "^0.0.5"
+  },
+  "scripts": {
+    "crawl": "node index.js",
+    "unpkg": "unpack ./rip/static/chunks ./out"
+  },
+  "license": "MIT"
+}
