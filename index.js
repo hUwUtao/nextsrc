@@ -47,27 +47,48 @@ axios.get(origin, axioscfg).then(res => {
             const row = source[key]
             row.forEach(function (source, sindex) {
                 if (!done[source]) {
-                    // if (source.endsWith(".js")) {
                     done[source] = true
-                    const tar = origin + '/_next/' + source + '.map'
-                    out('Get', tar)
-                    tasks++
-                    axios.get(tar).then(function (response) {
-                        out('Got', tar)
-                        createFolder(path.dirname(path.join(__dirname, 'rip', source + '.map')))
-                        fs.writeFile(path.join(__dirname, 'rip', source + '.map'), response.data + '', function (err) {
-                            if (err) {
-                                out('Error', err)
-                            }
-                            else {
-                                task --
-                                if (task < 1) {
-                                    out('Done')
+                    if (source.endsWith(".js")) {
+                        const tar = origin + '/_next/' + source + '.map'
+                        out('Get', tar)
+                        tasks++
+                        axios.get(tar).then(function (response) {
+                            out('Got', tar)
+                            createFolder(path.dirname(path.join(__dirname, 'rip', source + '.map')))
+                            fs.writeFile(path.join(__dirname, 'rip', source + '.map'), response.data + '', function (err) {
+                                if (err) {
+                                    out('Error', err)
                                 }
-                            }
+                                else {
+                                    task--
+                                    if (task < 1) {
+                                        out('Done')
+                                    }
+                                }
+                            })
                         })
-                    })
-                    // }
+                    }
+                    else {
+                        // just save
+                        const tar = origin + '/_next/' + source
+                        out('Get', tar)
+                        tasks++
+                        axios.get(tar).then(function (response) {
+                            out('Got', tar)
+                            createFolder(path.dirname(path.join(__dirname, 'rip', source)))
+                            fs.writeFile(path.join(__dirname, 'rip', source), response.data + '', function (err) {
+                                if (err) {
+                                    out('Error', err)
+                                }
+                                else {
+                                    task--
+                                    if (task < 1) {
+                                        out('Done')
+                                    }
+                                }
+                            })
+                        })
+                    }
                 }
             })
         })
